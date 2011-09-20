@@ -1,0 +1,24 @@
+#!/bin/bash
+
+dir=$(pwd)
+package=$(basename $dir)
+release=$(cat release)
+
+sourcepath=$package-$release
+
+echo $sourcepath
+
+mkdir tmp
+svn export SOURCES/$sourcepath tmp/$sourcepath
+cd tmp
+
+tar -cjf $sourcepath.tar.bz2 $sourcepath
+mv $sourcepath.tar.bz2 ../SOURCES
+
+cd ..
+
+bm -l SPECS/$package.spec
+
+rm SOURCES/$sourcepath.tar.bz2
+rm -rf tmp BUILD BUILDROOT SRPMS
+
